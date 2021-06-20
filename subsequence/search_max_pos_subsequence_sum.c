@@ -3,7 +3,7 @@
  * positive subsequence sum, use the greedy algorithm
  *
  * Created by Haoyuan Li on 2021/06/19
- * Last Modified: 2021/06/19 20:52:46
+ * Last Modified: 2021/06/20 19:04:58
  *=======================================================
  */
 #include <stdio.h>
@@ -84,11 +84,15 @@ int search_min_pos_subsequence_sum(int *a, size_t len, size_t *begin,
 int main(void)
 {
         int a[10] = { 10, -1, -3, 4, 5, -9, -3, 1 };
+        int b[4] = { 2, 2, 1, -1 };
         size_t begin, end;
 
         assert(1 == search_min_pos_subsequence_sum(a, 10, &begin, &end));
         assert(2 == begin);
         assert(3 == end);
+        assert(1 == search_min_pos_subsequence_sum(b, 4, &begin, &end));
+        assert(2 == begin);
+        assert(2 == end);
 
         return 0;
 }
