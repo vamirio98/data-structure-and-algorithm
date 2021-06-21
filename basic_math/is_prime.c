@@ -2,7 +2,7 @@
  * is_prime.c - determine whether a number is a prime
  *
  * Created by Haoyuan Li on 2021/06/20
- * Last Modified: 2021/06/20 20:26:30
+ * Last Modified: 2021/06/21 09:11:39
  *=======================================================
  */
 
@@ -12,11 +12,14 @@
 
 int is_prime(int n)
 {
-        if (n <= 3)
+        if (n <= 3) {
                 return n > 1;
+        }
+        if (n % 6 != 1 && n % 6 != 5) {
+                return 0;
+        }
         int s = sqrt(n);
-        int i;
-        for (i = 5; i <= s; i += 6) {
+        for (int i = 5; i <= s; i += 6) {
                 if ((n % i == 0) || (n % (i + 2) == 0)) {
                         return 0;
                 }
