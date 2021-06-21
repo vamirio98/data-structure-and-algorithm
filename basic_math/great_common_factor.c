@@ -2,13 +2,14 @@
  * great_common_factor.c - get the great common factor
  *
  * Created by Haoyuan Li on 2021/06/20
- * Last Modified: 2021/06/20 20:31:10
+ * Last Modified: 2021/06/21 21:06:32
  *=======================================================
  */
 
 #include <stdio.h>
 #include <assert.h>
 
+/* Euclid algorithm */
 unsigned get_god(unsigned a, unsigned b)
 {
         unsigned rem;
