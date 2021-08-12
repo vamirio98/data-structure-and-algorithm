@@ -2,7 +2,7 @@
  * File.hpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/12 12:56:06
+ * Last Modified: 2021/08/12 21:47:06
  */
 
 #ifndef FILE_HPP
@@ -18,9 +18,17 @@ public:
         static const std::string separator; // the path separator
 
 public:
+        File() = default;
         File(const File &) = delete;
         File &operator=(const File &) = delete;
         ~File() = default;
+
+        /**
+         * @brief Check whether the file or directory exists
+         *
+         * @return True when the file or directory exists, false when not
+         */
+        bool exists() const;
 
         /**
          * @brief Create a new File instance by the given path

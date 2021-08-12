@@ -2,12 +2,13 @@
  * File.cpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/12 12:57:56
+ * Last Modified: 2021/08/12 22:11:49
  */
 
 #include "File.hpp"
 
 #include <string>
+#include <sys/stat.h>
 
 using string = std::string;
 
@@ -21,8 +22,17 @@ File::File(const string &pathname): pathname(pathname)
 {
 }
 
-File::File(const string &parent, const string &child): pathname(parent + child)
+File::File(const string &parent, const string &child):
+        pathname(parent + separator + child)
 {
+}
+
+bool File::exists() const
+{
+        if (pathname.empty())
+                return false;
+        struct stat st;
+        return !(stat(pathname.c_str(), &st));
 }
 
 string File::get_name() const
