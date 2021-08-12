@@ -2,7 +2,7 @@
  * File.hpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/11 23:58:15
+ * Last Modified: 2021/08/12 12:56:06
  */
 
 #ifndef FILE_HPP
@@ -43,7 +43,14 @@ public:
          *
          * @return The name of the file or directory without the parent path
          */
-        std::string get_name();
+        std::string get_name() const;
+
+        /**
+         * @brief Get the name of the parent path
+         *
+         * @return The name of the parent path, "" if not found
+         */
+        std::string get_parent() const;
 
 private:
         /**

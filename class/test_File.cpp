@@ -2,7 +2,7 @@
  * test_File.cpp - test the File class
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/12 00:02:10
+ * Last Modified: 2021/08/12 12:53:15
  */
 
 #include "File.hpp"
@@ -13,9 +13,10 @@ using string = std::string;
 
 int main()
 {
-        string fname{"hello/world"};
+        string fname{"./hello/world"};
         File file(fname);
         assert(string{"world"} == file.get_name());
+        assert(file.get_parent() == "./hello");
 
         return 0;
 }

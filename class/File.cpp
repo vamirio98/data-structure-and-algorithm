@@ -2,7 +2,7 @@
  * File.cpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/11 23:54:15
+ * Last Modified: 2021/08/12 12:57:56
  */
 
 #include "File.hpp"
@@ -25,7 +25,7 @@ File::File(const string &parent, const string &child): pathname(parent + child)
 {
 }
 
-string File::get_name()
+string File::get_name() const
 {
         if (pathname.empty())
                 return "";
@@ -33,6 +33,16 @@ string File::get_name()
         if (pos != string::npos)
                 return pathname.substr(pos + 1);
         return pathname;
+}
+
+string File::get_parent() const
+{
+        if (pathname.empty())
+                return "";
+        auto pos = find_last_separator();
+        if (pos != string::npos)
+                return pathname.substr(0, pos);
+        return "";
 }
 
 string::size_type File::find_last_separator() const
