@@ -2,7 +2,7 @@
  * File.cpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/13 14:32:05
+ * Last Modified: 2021/08/13 14:39:16
  */
 
 #include "File.hpp"
@@ -23,42 +23,42 @@ using string = std::string;
         const string File::separator{"\\"};
 #endif
 
-File::File(const string &pathname): pathname(pathname)
+File::File(const string &pathname): pathname_(pathname)
 {
 }
 
 File::File(const string &parent, const string &child):
-        pathname(parent + separator + child)
+        pathname_(parent + separator + child)
 {
 }
 
 bool File::exists() const
 {
         struct stat st;
-        return !(stat(pathname.c_str(), &st));
+        return !(stat(pathname_.c_str(), &st));
 }
 
 string File::get_name() const
 {
         auto pos = find_last_separator();
         if (pos != string::npos)
-                return pathname.substr(pos + 1);
-        return pathname;
+                return pathname_.substr(pos + 1);
+        return pathname_;
 }
 
 string File::get_parent() const
 {
         auto pos = find_last_separator();
         if (pos != string::npos)
-                return pathname.substr(0, pos);
+                return pathname_.substr(0, pos);
         return "";
 }
 
 string File::get_absolute_path() const
 {
-        string abs_path{pathname};
+        string abs_path{pathname_};
 #ifdef unix
-        string parent{pathname};
+        string parent{pathname_};
         string child{""};
         char *p;
         while (!parent.empty() && !(p = realpath(parent.c_str(), nullptr))) {
@@ -76,12 +76,12 @@ string File::get_absolute_path() const
         return abs_path;
 }
 
-string::size_type File::find_last_separator(const string &path)
+string::size_type File::find_last_separator(const string &pathname)
 {
-        return path.find_last_of(separator);
+        return pathname.find_last_of(separator);
 }
 
 string::size_type File::find_last_separator() const
 {
-        return find_last_separator(pathname);
+        return find_last_separator(pathname_);
 }
