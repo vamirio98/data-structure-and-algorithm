@@ -2,7 +2,7 @@
  * File.cpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/13 17:11:31
+ * Last Modified: 2021/08/13 17:29:49
  */
 
 #include "File.hpp"
@@ -50,8 +50,10 @@ bool File::is_file(const string &pathname)
 #ifdef unix
         struct stat s;
         if (stat(pathname.c_str(), &s) == 0)
-                state = s.st_mode & S_IFREG;
+                state = S_ISREG(s.st_mode);
 #else // WIN32
+        if(!(GetFileAttributes(pathname.c_str()) & FILE_ATTRIBUTE_DIRECTORY))
+                state = true;
 #endif
         return state;
 }
@@ -67,8 +69,10 @@ bool File::is_directory(const string &pathname)
 #ifdef unix
         struct stat s;
         if (stat(pathname.c_str(), &s) == 0)
-                state = s.st_mode & S_IFDIR;
+                state = S_ISDIR(s.st_mode);
 #else // WIN32
+        if (GetFileAttributes(pathname.c_str()) & FILE_ATTRIBUTE_DIRECTORY)
+                state = true;
 #endif
         return state;
 }
@@ -84,6 +88,8 @@ bool File::is_hidden(const string &pathname)
 #ifdef unix
         state = (get_name(pathname)[0] == '.');
 #else // WIN32
+        if (GetFileAttributes(pathname.c_str()) & FILE_ATTRIBUTE_HIDDEN)
+                state = true;
 #endif
         return state;
 }
