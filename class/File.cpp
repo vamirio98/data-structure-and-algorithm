@@ -2,7 +2,7 @@
  * File.cpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/13 14:39:16
+ * Last Modified: 2021/08/13 15:13:33
  */
 
 #include "File.hpp"
@@ -13,6 +13,7 @@
 #ifdef unix
         #include <cstdlib>
 #else // WIN32
+        #include <windows.h>
 #endif
 
 using string = std::string;
@@ -72,6 +73,13 @@ string File::get_absolute_path() const
                 abs_path = string{p} + child;
                 free(p);
         }
+#else // WIN32
+        DWORD state = 0;
+        TCHAR buf[MAX_PATH] = TEXT("");
+
+        state = GetFullPathName(pathname_.c_str(), MAX_PATH, buf, nullptr);
+        if (state != 0)
+                abs_path = string{buf};
 #endif
         return abs_path;
 }
