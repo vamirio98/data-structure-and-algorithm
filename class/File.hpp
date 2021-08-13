@@ -2,7 +2,7 @@
  * File.hpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/13 22:50:58
+ * Last Modified: 2021/08/14 00:52:19
  */
 
 #ifndef FILE_HPP
@@ -109,7 +109,7 @@ public:
          * @param t The number of seconds elapsed since the Epoch, 1970-01-01
          *          00:00:00 +0000 (UTC)
          *
-         * @return The time string, format: week month day HH:MM:SS year
+         * @return The time string, format: www mmm dd hh:mm:ss yyyy
          */
         static std::string get_time_str(const time_t &t);
 
