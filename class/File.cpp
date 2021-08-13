@@ -2,7 +2,7 @@
  * File.cpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/13 15:13:33
+ * Last Modified: 2021/08/13 17:11:31
  */
 
 #include "File.hpp"
@@ -33,33 +33,97 @@ File::File(const string &parent, const string &child):
 {
 }
 
+bool File::exists(const string &pathname)
+{
+        struct stat s;
+        return stat(pathname.c_str(), &s) == 0;
+}
+
 bool File::exists() const
 {
-        struct stat st;
-        return !(stat(pathname_.c_str(), &st));
+        return exists(pathname_);
+}
+
+bool File::is_file(const string &pathname)
+{
+        bool state{false};
+#ifdef unix
+        struct stat s;
+        if (stat(pathname.c_str(), &s) == 0)
+                state = s.st_mode & S_IFREG;
+#else // WIN32
+#endif
+        return state;
+}
+
+bool File::is_file() const
+{
+        return is_file(pathname_);
+}
+
+bool File::is_directory(const string &pathname)
+{
+        bool state{false};
+#ifdef unix
+        struct stat s;
+        if (stat(pathname.c_str(), &s) == 0)
+                state = s.st_mode & S_IFDIR;
+#else // WIN32
+#endif
+        return state;
+}
+
+bool File::is_directory() const
+{
+        return is_directory(pathname_);
+}
+
+bool File::is_hidden(const string &pathname)
+{
+        bool state{false};
+#ifdef unix
+        state = (get_name(pathname)[0] == '.');
+#else // WIN32
+#endif
+        return state;
+}
+
+bool File::is_hidden() const
+{
+        return is_hidden(pathname_);
+}
+
+string File::get_name(const string &pathname)
+{
+        auto pos = find_last_separator(pathname);
+        if (pos != string::npos)
+                return pathname.substr(pos + 1);
+        return pathname;
 }
 
 string File::get_name() const
 {
-        auto pos = find_last_separator();
+        return get_name(pathname_);
+}
+
+string File::get_parent(const string &pathname)
+{
+        auto pos = find_last_separator(pathname);
         if (pos != string::npos)
-                return pathname_.substr(pos + 1);
-        return pathname_;
+                return pathname.substr(0, pos);
+        return "";
 }
 
 string File::get_parent() const
 {
-        auto pos = find_last_separator();
-        if (pos != string::npos)
-                return pathname_.substr(0, pos);
-        return "";
+        return get_parent(pathname_);
 }
 
-string File::get_absolute_path() const
+string File::get_absolute_path(const string &pathname)
 {
-        string abs_path{pathname_};
+        string abs_path{pathname};
 #ifdef unix
-        string parent{pathname_};
+        string parent{pathname};
         string child{""};
         char *p;
         while (!parent.empty() && !(p = realpath(parent.c_str(), nullptr))) {
@@ -77,11 +141,16 @@ string File::get_absolute_path() const
         DWORD state = 0;
         TCHAR buf[MAX_PATH] = TEXT("");
 
-        state = GetFullPathName(pathname_.c_str(), MAX_PATH, buf, nullptr);
+        state = GetFullPathName(pathname.c_str(), MAX_PATH, buf, nullptr);
         if (state != 0)
                 abs_path = string{buf};
 #endif
         return abs_path;
+}
+
+string File::get_absolute_path() const
+{
+        return get_absolute_path(pathname_);
 }
 
 string::size_type File::find_last_separator(const string &pathname)
