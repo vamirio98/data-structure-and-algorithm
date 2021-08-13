@@ -2,7 +2,7 @@
  * test_File.cpp - test the File class
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/13 22:36:02
+ * Last Modified: 2021/08/13 22:56:35
  */
 
 #include "File.hpp"
@@ -47,6 +47,8 @@ int main()
         cout << file1.get_absolute_path() << endl;
         cout << file2.get_absolute_path() << endl;
         cout << File::get_time_str(file2.last_modified()) << endl;
+        cout << file1.get_size() << endl;
+        cout << file2.get_size() << endl;
 
         return 0;
 }

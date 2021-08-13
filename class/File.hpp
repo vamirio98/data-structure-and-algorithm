@@ -2,7 +2,7 @@
  * File.hpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/13 22:30:39
+ * Last Modified: 2021/08/13 22:50:58
  */
 
 #ifndef FILE_HPP
@@ -113,6 +113,16 @@ public:
          */
         static std::string get_time_str(const time_t &t);
 
+        /**
+         * @brief Get the file @pathname's size
+         *
+         * @param pathname The file pathname
+         *
+         * @return The file size in bytes, 0 when the file not exists or it's a
+         *         directory
+         */
+        static long get_size(const std::string &pathname);
+
 public:
         File() = default;
         File(const File &) = delete;
@@ -199,6 +209,14 @@ public:
          *         when successed, 0 when failed
          */
         time_t last_modified() const;
+
+        /**
+         * @brief Get the file size
+         *
+         * @return The file size in bytes, 0 when the file not exists or it's a
+         *         directory
+         */
+        long get_size() const;
 
 private:
         /**

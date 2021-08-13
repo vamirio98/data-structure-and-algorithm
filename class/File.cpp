@@ -2,7 +2,7 @@
  * File.cpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/13 22:26:58
+ * Last Modified: 2021/08/13 22:56:21
  */
 
 #include "File.hpp"
@@ -183,6 +183,23 @@ time_t File::last_modified() const
 string File::get_time_str(const time_t &t)
 {
         return ctime(&t);
+}
+
+long File::get_size(const string &pathname)
+{
+        long size = 0;
+#ifdef unix
+        struct stat s;
+        if (stat(pathname.c_str(), &s) == 0 && S_ISREG(s.st_mode))
+                size = s.st_size;
+#else // WIN32
+#endif
+        return size;
+}
+
+long File::get_size() const
+{
+        return get_size(pathname_);
 }
 
 string::size_type File::find_last_separator(const string &pathname)
