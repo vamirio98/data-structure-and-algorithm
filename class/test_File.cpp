@@ -2,7 +2,7 @@
  * test_File.cpp - test the File class
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/13 17:32:02
+ * Last Modified: 2021/08/13 22:27:42
  */
 
 #include "File.hpp"
@@ -39,8 +39,10 @@ int main()
 #endif
 
         assert(file1.get_name() == "world");
+        assert(file1.get_path() == "./hello/world");
         cout << file1.get_absolute_path() << endl;
         cout << file2.get_absolute_path() << endl;
+        cout << File::get_time_str(file2.last_modified()) << endl;
 
         return 0;
 }

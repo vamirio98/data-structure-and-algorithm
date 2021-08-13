@@ -2,18 +2,20 @@
  * File.cpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/13 17:29:49
+ * Last Modified: 2021/08/13 22:26:58
  */
 
 #include "File.hpp"
 
 #include <string>
 #include <sys/stat.h>
+#include <ctime>
 
 #ifdef unix
         #include <cstdlib>
 #else // WIN32
         #include <windows.h>
+        #define stat _stat
 #endif
 
 using string = std::string;
@@ -112,6 +114,11 @@ string File::get_name() const
         return get_name(pathname_);
 }
 
+string File::get_path() const
+{
+        return pathname_;
+}
+
 string File::get_parent(const string &pathname)
 {
         auto pos = find_last_separator(pathname);
@@ -157,6 +164,25 @@ string File::get_absolute_path(const string &pathname)
 string File::get_absolute_path() const
 {
         return get_absolute_path(pathname_);
+}
+
+time_t File::last_modified(const string &pathname)
+{
+        time_t t = 0;
+        struct stat s;
+        if (stat(pathname.c_str(), &s) == 0)
+                t = s.st_mtime;
+        return t;
+}
+
+time_t File::last_modified() const
+{
+        return last_modified(pathname_);
+}
+
+string File::get_time_str(const time_t &t)
+{
+        return ctime(&t);
 }
 
 string::size_type File::find_last_separator(const string &pathname)

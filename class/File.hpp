@@ -2,13 +2,14 @@
  * File.hpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/13 16:56:33
+ * Last Modified: 2021/08/13 22:30:39
  */
 
 #ifndef FILE_HPP
 #define FILE_HPP
 
 #include <string>
+#include <ctime>
 
 class File {
 private:
@@ -91,6 +92,27 @@ public:
          */
         static std::string get_absolute_path(const std::string &pathname);
 
+        /**
+         * @brief Get the last-modified time
+         *
+         * @param pathname The file pathname
+         *
+         * @return The last-modified time representing the number of seconds
+         *         elapsed since the Epoch, 1970-01-01 00:00:00 +0000 (UTC)
+         *         when successed, 0 when failed
+         */
+        static time_t last_modified(const std::string &pathname);
+
+        /**
+         * @brief Get the time string
+         *
+         * @param t The number of seconds elapsed since the Epoch, 1970-01-01
+         *          00:00:00 +0000 (UTC)
+         *
+         * @return The time string, format: week month day HH:MM:SS year
+         */
+        static std::string get_time_str(const time_t &t);
+
 public:
         File() = default;
         File(const File &) = delete;
@@ -149,6 +171,13 @@ public:
         std::string get_name() const;
 
         /**
+         * @brief Get the path of file
+         *
+         * @return The path
+         */
+        std::string get_path() const;
+
+        /**
          * @brief Get the name of the parent path
          *
          * @return The name of the parent path, "" if not found
@@ -161,6 +190,15 @@ public:
          * @return The canonicalized absolute path
          */
         std::string get_absolute_path() const;
+
+        /**
+         * @brief Get the last-modified time
+         *
+         * @return The last-modified time representing the number of seconds
+         *         elapsed since the Epoch, 1970-01-01 00:00:00 +0000 (UTC)
+         *         when successed, 0 when failed
+         */
+        time_t last_modified() const;
 
 private:
         /**
