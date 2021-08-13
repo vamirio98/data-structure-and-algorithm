@@ -2,7 +2,7 @@
  * File.hpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/12 21:47:06
+ * Last Modified: 2021/08/12 23:57:14
  */
 
 #ifndef FILE_HPP
@@ -16,6 +16,17 @@ private:
 
 public:
         static const std::string separator; // the path separator
+
+        /**
+         * @brief Get the last separator in the @path
+         *
+         * @param path The path
+         *
+         * @return The index of the last separator, std::string::npos if not
+         *         found
+         */
+        static std::string::size_type find_last_separator(
+                        const std::string &path);
 
 public:
         File() = default;
@@ -59,6 +70,13 @@ public:
          * @return The name of the parent path, "" if not found
          */
         std::string get_parent() const;
+
+        /**
+         * @brief Get the canonicalized absolute path
+         *
+         * @return The canonicalized absolute path
+         */
+        std::string get_absolute_path() const;
 
 private:
         /**
