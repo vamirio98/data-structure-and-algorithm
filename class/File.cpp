@@ -2,7 +2,7 @@
  * File.cpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/13 22:56:21
+ * Last Modified: 2021/08/14 00:46:48
  */
 
 #include "File.hpp"
@@ -188,12 +188,9 @@ string File::get_time_str(const time_t &t)
 long File::get_size(const string &pathname)
 {
         long size = 0;
-#ifdef unix
         struct stat s;
-        if (stat(pathname.c_str(), &s) == 0 && S_ISREG(s.st_mode))
+        if (stat(pathname.c_str(), &s) == 0 && is_file(pathname))
                 size = s.st_size;
-#else // WIN32
-#endif
         return size;
 }
 
