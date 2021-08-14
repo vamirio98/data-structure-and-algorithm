@@ -2,11 +2,12 @@
  * File.cpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/14 17:33:45
+ * Last Modified: 2021/08/14 19:11:12
  */
 
 #include "File.hpp"
 
+#include <vector>
 #include <string>
 #include <sys/stat.h>
 #include <ctime>
@@ -15,6 +16,7 @@
 #if defined(__unix__)
 
 #include <unistd.h>
+#include <dirent.h>
 
 #elif defined(_MSC_VER)
 
@@ -28,7 +30,7 @@
 
 #endif
 
-using string = std::string;
+using std::string;
 
 #if defined(__unix__)
         const string File::separator{"/"};
@@ -194,7 +196,7 @@ string File::get_time_str(const time_t &t, const string &format)
 {
         struct tm bt;
 #if defined(__unix__)
-        localtime_r(&t, &tmp);
+        localtime_r(&t, &bt);
 #elif defined(_MSC_VER)
         localtime_s(&bt, &t);
 #endif
@@ -245,6 +247,28 @@ bool File::can_execute(const string &pathname)
 bool File::can_execute() const
 {
         return can_execute(pathname_);
+}
+
+std::vector<string> File::list(const string &pathname)
+{
+        std::vector<string> filelist;
+#if defined(__unix__)
+        DIR *dp;
+        struct dirent *p;
+        do {
+                if ((dp = opendir(pathname.c_str())) == nullptr)
+                        break;
+                while ((p = readdir(dp)))
+                        filelist.push_back(p->d_name);
+                closedir(dp);
+        } while (0);
+#endif
+        return filelist;
+}
+
+std::vector<string> File::list() const
+{
+        return list(pathname_);
 }
 
 string::size_type File::find_last_separator(const string &pathname)

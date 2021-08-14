@@ -2,10 +2,11 @@
  * test_File.cpp - test the File class
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/14 16:39:06
+ * Last Modified: 2021/08/14 19:14:18
  */
 
 #include "File.hpp"
+#include <vector>
 #include <string>
 #include <assert.h>
 #include <iostream>
@@ -13,7 +14,7 @@
 using std::cout;
 using std::endl;
 
-using string = std::string;
+using std::string;
 
 int main()
 {
@@ -55,6 +56,18 @@ int main()
         assert(file2.can_read());
         assert(file2.can_write());
         assert(File(file2.get_parent()).can_execute());
+        std::vector<string> v = file1.list();
+        for (const auto &s : v)
+                cout << s << endl;
+        cout << endl;
+        v = file2.list();
+        for (const auto &s : v)
+                cout << s << endl;
+        cout << endl;
+        v = File(file2.get_parent()).list();
+        for (const auto &s : v)
+                cout << s << endl;
+        cout << endl;
 
         return 0;
 }

@@ -2,12 +2,13 @@
  * File.hpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/14 17:32:09
+ * Last Modified: 2021/08/14 18:53:42
  */
 
 #ifndef FILE_HPP
 #define FILE_HPP
 
+#include <vector>
 #include <string>
 #include <ctime>
 
@@ -268,6 +269,24 @@ public:
          * @return True when file is executable, false when not
          */
         bool can_execute() const;
+
+        /**
+         * @brief List all files and subdirectories in the directory
+         *
+         * @param pathname The directory path
+         *
+         * @return The file list vector, or void vector when the file is not
+         *         exists or is not a directory
+         */
+        static std::vector<std::string> list(const std::string &pathname);
+
+        /**
+         * @brief List all files and subdirectories in the directory
+         *
+         * @return The file list vector, or void vector when the file is not
+         *         exists or is not a directory
+         */
+        std::vector<std::string> list() const;
 
 private:
         /**
