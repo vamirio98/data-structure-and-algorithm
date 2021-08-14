@@ -2,7 +2,7 @@
  * File.cpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/14 16:40:18
+ * Last Modified: 2021/08/14 17:33:45
  */
 
 #include "File.hpp"
@@ -190,12 +190,12 @@ time_t File::last_modified() const
         return last_modified(pathname_);
 }
 
-string File::get_time_str(const time_t &t)
+string File::get_time_str(const time_t &t, const string &format)
 {
-        string s{ctime(&t)};
-        if (!s.empty()) // remove the trailing '\n'
-                s[s.size() - 1] = '\0';
-        return s;
+        struct tm *p = localtime(&t);
+        char buf[26];
+        strftime(buf, sizeof(buf), format.c_str(), p);
+        return string{buf};
 }
 
 long File::get_size(const string &pathname)

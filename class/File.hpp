@@ -2,7 +2,7 @@
  * File.hpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/14 16:35:51
+ * Last Modified: 2021/08/14 17:32:09
  */
 
 #ifndef FILE_HPP
@@ -195,10 +195,13 @@ public:
          *
          * @param t The number of seconds elapsed since the Epoch, 1970-01-01
          *          00:00:00 +0000 (UTC)
+         * @param format The time format, the same as strftime(), default:
+         *               "%a %b %d %H:%M:%S %Y"
          *
-         * @return The time string, format: www mmm dd hh:mm:ss yyyy
+         * @return The time string, default format: Www Mmm dd hh:mm:ss yyyy
          */
-        static std::string get_time_str(const time_t &t);
+        static std::string get_time_str(const time_t &t, const std::string
+                        &format = std::string{"%a %b %d %H:%M:%S %Y"});
 
         /**
          * @brief Get the file @pathname's size
