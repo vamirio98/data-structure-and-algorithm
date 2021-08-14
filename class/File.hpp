@@ -2,7 +2,7 @@
  * File.hpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/14 18:53:42
+ * Last Modified: 2021/08/14 21:46:48
  */
 
 #ifndef FILE_HPP
@@ -37,20 +37,36 @@ public:
         ~File() = default;
 
         /**
-         * @brief Create a new File instance by the given path
+         * @brief Create a new File object by the given path
          *
          * @param pathname the specified path
          */
         File(const std::string &pathname);
 
         /**
-         * @brief Create a new File instance by the given parent path and
+         * @brief Create a new File object by the given parent path and
          *        child path
          *
          * @param parent The parent path
          * @param child The child path
          */
         File(const std::string &parent, const std::string &child);
+
+        /**
+         * @brief Bind the File object to an abstract path
+         *
+         * @param pathname The abstract path
+         *
+         * @sa unbind()
+         */
+        void bind(const std::string &pathname);
+
+        /**
+         * @brief Unbind the File object
+         *
+         * @sa bind()
+         */
+        void unbind();
 
         /**
          * @brief Check whether the file @pathname exists
@@ -287,6 +303,22 @@ public:
          *         exists or is not a directory
          */
         std::vector<std::string> list() const;
+
+        /**
+         * @brief Get the extension of file @pathname
+         *
+         * @param pathname The pathname
+         *
+         * @return The extension, "" when not found
+         */
+        static std::string get_extension(const std::string &pathname);
+
+        /**
+         * @brief Get the extension of the file
+         *
+         * @return The extension, "" when not found
+         */
+        std::string get_extension() const;
 
 private:
         /**

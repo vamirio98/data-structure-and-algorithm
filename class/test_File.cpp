@@ -2,7 +2,7 @@
  * test_File.cpp - test the File class
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/14 19:14:18
+ * Last Modified: 2021/08/14 21:51:29
  */
 
 #include "File.hpp"
@@ -18,12 +18,12 @@ using std::string;
 
 int main()
 {
-#ifdef unix
+#if defined(__unix__)
         File file1("./hello/world");
         File file2("../class", "test_File.cpp");
         File file3(".bashrc");
         assert(file1.get_parent() == "./hello");
-#else // WIN32
+#elif defined(_MSC_VER)
         File file1(".\\hello\\world");
         File file2("..\\class", "test_File.cpp");
         assert(file1.get_parent() == ".\\hello");
@@ -35,14 +35,18 @@ int main()
         assert(!file2.is_directory());
         assert(File{file2.get_parent()}.is_directory());
         assert(!file2.is_hidden());
-#ifdef unix
+#if defined(__unix__)
         assert(file3.is_hidden());
 #endif
 
         assert(file1.get_name() == "world");
-#ifdef unix
+        file1.unbind();
+        assert(file1.get_name() == "");
+#if defined(__unix__)
+        file1.bind("./hello/world");
         assert(file1.get_path() == "./hello/world");
-#else // WIN32
+#elif defined(_MSC_VER)
+        file1.bind(".\\hello\\world");
         assert(file1.get_path() == ".\\hello\\world");
 #endif
         cout << file1.get_absolute_path() << endl;
@@ -68,6 +72,8 @@ int main()
         for (const auto &s : v)
                 cout << s << endl;
         cout << endl;
+        assert(file1.get_extension() == "");
+        assert(file2.get_extension() == "cpp");
 
         return 0;
 }

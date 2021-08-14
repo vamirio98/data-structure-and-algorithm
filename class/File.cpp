@@ -2,7 +2,7 @@
  * File.cpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/14 19:11:12
+ * Last Modified: 2021/08/14 21:47:51
  */
 
 #include "File.hpp"
@@ -45,6 +45,16 @@ File::File(const string &pathname): pathname_(pathname)
 File::File(const string &parent, const string &child):
         pathname_(parent + separator + child)
 {
+}
+
+void File::bind(const string &pathname)
+{
+        pathname_ = pathname;
+}
+
+void File::unbind()
+{
+        pathname_.clear();
 }
 
 bool File::exists(const string &pathname)
@@ -262,8 +272,36 @@ std::vector<string> File::list(const string &pathname)
                         filelist.push_back(p->d_name);
                 closedir(dp);
         } while (0);
+#elif defined(_MSC_VER)
+        WIN32_FIND_DATA ffd;
+        HANDLE h_find = INVALID_HANDLE_VALUE;
+        do {
+                h_find = FindFirstFile((pathname + separator + "*").c_str(), &ffd);
+                if (h_find == INVALID_HANDLE_VALUE)
+                        break;
+                do {
+                        filelist.push_back(ffd.cFileName);
+                } while (FindNextFile(h_find, &ffd));
+                FindClose(h_find);
+        } while (0); 
 #endif
         return filelist;
+}
+
+string File::get_extension(const string &pathname)
+{
+        string ext{""};
+        auto spos = find_last_separator(pathname);
+        auto dpos = pathname.find_last_of(".");
+        if (dpos != string::npos && dpos != 0 && (spos == string::npos ||
+                                dpos > spos))
+                ext = pathname.substr(dpos + 1);
+        return ext;
+}
+
+string File::get_extension() const
+{
+        return get_extension(pathname_);
 }
 
 std::vector<string> File::list() const
