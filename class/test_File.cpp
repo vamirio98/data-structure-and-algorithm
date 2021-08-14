@@ -2,7 +2,7 @@
  * test_File.cpp - test the File class
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/13 22:56:35
+ * Last Modified: 2021/08/14 16:39:06
  */
 
 #include "File.hpp"
@@ -49,6 +49,12 @@ int main()
         cout << File::get_time_str(file2.last_modified()) << endl;
         cout << file1.get_size() << endl;
         cout << file2.get_size() << endl;
+        assert(!file1.can_read());
+        assert(!file1.can_write());
+        assert(!file1.can_execute());
+        assert(file2.can_read());
+        assert(file2.can_write());
+        assert(File(file2.get_parent()).can_execute());
 
         return 0;
 }

@@ -2,7 +2,7 @@
  * File.cpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/14 00:55:56
+ * Last Modified: 2021/08/14 16:40:18
  */
 
 #include "File.hpp"
@@ -10,6 +10,7 @@
 #include <string>
 #include <sys/stat.h>
 #include <ctime>
+#include <unistd.h>
 
 #ifdef unix
         #include <cstdlib>
@@ -200,6 +201,36 @@ long File::get_size(const string &pathname)
 long File::get_size() const
 {
         return get_size(pathname_);
+}
+
+bool File::can_read(const string &pathname)
+{
+        return access(pathname.c_str(), R_OK) == 0;
+}
+
+bool File::can_read() const
+{
+        return can_read(pathname_);
+}
+
+bool File::can_write(const string &pathname)
+{
+        return access(pathname.c_str(), W_OK) == 0;
+}
+
+bool File::can_write() const
+{
+        return can_write(pathname_);
+}
+
+bool File::can_execute(const string &pathname)
+{
+        return access(pathname.c_str(), X_OK) == 0;
+}
+
+bool File::can_execute() const
+{
+        return can_execute(pathname_);
 }
 
 string::size_type File::find_last_separator(const string &pathname)
