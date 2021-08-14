@@ -12,11 +12,11 @@
 #include <ctime>
 #include <cstdlib>
 
-#ifdef unix
+#if defined(__unix__)
 
 #include <unistd.h>
 
-#else // WIN32
+#elif defined(_MSC_VER)
 
 #include <windows.h>
 #include <io.h>
@@ -30,9 +30,9 @@
 
 using string = std::string;
 
-#ifdef unix
+#if defined(__unix__)
         const string File::separator{"/"};
-#else // WIN32
+#elif defined(_MSC_VER)
         const string File::separator{"\\"};
 #endif
 
@@ -59,11 +59,11 @@ bool File::exists() const
 bool File::is_file(const string &pathname)
 {
         bool state{false};
-#ifdef unix
+#if defined(__unix__)
         struct stat s;
         if (stat(pathname.c_str(), &s) == 0)
                 state = S_ISREG(s.st_mode);
-#else // WIN32
+#elif defined(_MSC_VER)
         if(!(GetFileAttributes(pathname.c_str()) & FILE_ATTRIBUTE_DIRECTORY))
                 state = true;
 #endif
@@ -78,11 +78,11 @@ bool File::is_file() const
 bool File::is_directory(const string &pathname)
 {
         bool state{false};
-#ifdef unix
+#if defined(__unix__)
         struct stat s;
         if (stat(pathname.c_str(), &s) == 0)
                 state = S_ISDIR(s.st_mode);
-#else // WIN32
+#elif defined(_MSC_VER)
         if (GetFileAttributes(pathname.c_str()) & FILE_ATTRIBUTE_DIRECTORY)
                 state = true;
 #endif
@@ -97,9 +97,9 @@ bool File::is_directory() const
 bool File::is_hidden(const string &pathname)
 {
         bool state{false};
-#ifdef unix
+#if defined(__unix__)
         state = (get_name(pathname)[0] == '.');
-#else // WIN32
+#elif defined(_MSC_VER)
         if (GetFileAttributes(pathname.c_str()) & FILE_ATTRIBUTE_HIDDEN)
                 state = true;
 #endif
@@ -145,7 +145,7 @@ string File::get_parent() const
 string File::get_absolute_path(const string &pathname)
 {
         string abs_path{pathname};
-#ifdef unix
+#if defined(__unix__)
         string parent{pathname};
         string child{""};
         char *p;
@@ -160,7 +160,7 @@ string File::get_absolute_path(const string &pathname)
                 abs_path = string{p} + child;
                 free(p);
         }
-#else // WIN32
+#elif defined(_MSC_VER)
         DWORD state = 0;
         TCHAR buf[MAX_PATH] = TEXT("");
 
@@ -192,9 +192,14 @@ time_t File::last_modified() const
 
 string File::get_time_str(const time_t &t, const string &format)
 {
-        struct tm *p = localtime(&t);
-        char buf[26];
-        strftime(buf, sizeof(buf), format.c_str(), p);
+        struct tm bt;
+#if defined(__unix__)
+        localtime_r(&t, &tmp);
+#elif defined(_MSC_VER)
+        localtime_s(&bt, &t);
+#endif
+        char buf[64];
+        strftime(buf, sizeof(buf), format.c_str(), &bt);
         return string{buf};
 }
 
