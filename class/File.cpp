@@ -10,13 +10,22 @@
 #include <string>
 #include <sys/stat.h>
 #include <ctime>
-#include <unistd.h>
+#include <cstdlib>
 
 #ifdef unix
-        #include <cstdlib>
+
+#include <unistd.h>
+
 #else // WIN32
-        #include <windows.h>
-        #define stat _stat
+
+#include <windows.h>
+#include <io.h>
+#define stat _stat
+#define access _access
+#define R_OK 4
+#define W_OK 2
+#define X_OK 0
+
 #endif
 
 using string = std::string;
