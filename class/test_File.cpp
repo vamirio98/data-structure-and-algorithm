@@ -2,7 +2,7 @@
  * test_File.cpp - test the File class
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/14 21:51:29
+ * Last Modified: 2021/08/15 22:00:06
  */
 
 #include "File.hpp"
@@ -74,6 +74,24 @@ int main()
         cout << endl;
         assert(file1.get_extension() == "");
         assert(file2.get_extension() == "cpp");
+        File new_file{"./hello"};
+        assert(new_file.create_new_file());
+        v = File(file2.get_parent()).list();
+        for (const auto &s : v)
+                cout << s << endl;
+        cout << endl;
+        assert(new_file.remove());
+        v = File(file2.get_parent()).list();
+        for (const auto &s : v)
+                cout << s << endl;
+        cout << endl;
+        new_file.unbind();
+        new_file.bind("./a");
+        assert(new_file.remove());
+        v = File(file2.get_parent()).list();
+        for (const auto &s : v)
+                cout << s << endl;
+        cout << endl;
 
         return 0;
 }

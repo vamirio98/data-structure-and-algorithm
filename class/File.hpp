@@ -2,7 +2,7 @@
  * File.hpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/14 21:46:48
+ * Last Modified: 2021/08/15 21:39:15
  */
 
 #ifndef FILE_HPP
@@ -320,12 +320,50 @@ public:
          */
         std::string get_extension() const;
 
+        /**
+         * @brief Create a new file
+         *
+         * @param pathname The name of the new file
+         *
+         * @return True if the file does not exist and successfully created,
+         *         false if the named file already exists or can not create
+         */
+        static bool create_new_file(const std::string &pathname);
+
+        /**
+         * @brief Create a new file
+         *
+         * @return True if the file does not exist and successfully created,
+         *         false if the named file already exists or can not create
+         */
+        bool create_new_file();
+
+        /**
+         * @brief Remove a file or directory
+         *
+         * @param pathname The name of the file or directory to remove
+         *
+         * @return Ture if and only if the file or directory is successfully
+         *         removed, false otherwise
+         */
+        static bool remove(const std::string &pathname);
+
+        /**
+         * @brief Remove a file or directory
+         *
+         * @return Ture if and only if the file or directory is successfully
+         *         removed, false otherwise
+         */
+        bool remove();
+
 private:
         /**
          * @brief Get the last separator in the pathname
          *
          * @return The index of the last separator, std::string::npos if not
          *         found
+         *
+         * @sa get_error()
          */
         std::string::size_type find_last_separator() const;
 };

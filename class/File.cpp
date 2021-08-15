@@ -2,7 +2,7 @@
  * File.cpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/14 21:47:51
+ * Last Modified: 2021/08/15 22:04:39
  */
 
 #include "File.hpp"
@@ -307,6 +307,38 @@ string File::get_extension() const
 std::vector<string> File::list() const
 {
         return list(pathname_);
+}
+
+bool File::create_new_file(const string &pathname)
+{
+        bool state = false;
+        if (exists(pathname))
+                return state;
+        auto p = fopen(pathname.c_str(), "w");
+        if (p) {
+                fclose(p);
+                state = true;
+        }
+        return state;
+}
+
+bool File::create_new_file()
+{
+        return create_new_file(pathname_);
+}
+
+bool File::remove(const string &pathname)
+{
+        bool state = false;
+        if (!exists(pathname))
+                return state;
+        state = ::remove(pathname.c_str()) == 0;
+        return state;
+}
+
+bool File::remove()
+{
+        return remove(pathname_);
 }
 
 string::size_type File::find_last_separator(const string &pathname)
