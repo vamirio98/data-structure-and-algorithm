@@ -2,7 +2,7 @@
  * File.hpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/15 21:39:15
+ * Last Modified: 2021/08/15 22:58:46
  */
 
 #ifndef FILE_HPP
@@ -355,6 +355,25 @@ public:
          *         removed, false otherwise
          */
         bool remove();
+
+        /**
+         * @brief Crete a directory with the specified permission
+         *
+         * @param pathname The name of the directory to create
+         * @param mode The permission, default: 0755
+         *
+         * @return Ture when directory was created, false otherwise
+         */
+        static bool mkdir(const std::string &pathname, mode_t mode = 0755);
+
+        /**
+         * @brief Crete a directory
+         *
+         * @param mode The permission, default: 0755
+         *
+         * @return Ture when directory was created, false otherwise
+         */
+        bool mkdir(mode_t mode = 0755);
 
 private:
         /**
