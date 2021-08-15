@@ -2,7 +2,7 @@
  * File.cpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/15 22:58:59
+ * Last Modified: 2021/08/15 23:13:10
  */
 
 #include "File.hpp"
@@ -349,6 +349,21 @@ bool File::mkdir(const string &pathname, mode_t mode)
 bool File::mkdir(mode_t mode)
 {
         return mkdir(pathname_, mode);
+}
+
+bool File::move(const string &src, const string &dest)
+{
+        return rename(src.c_str(), dest.c_str()) == 0;
+}
+
+bool File::move(const string &dest)
+{
+        bool state = false;
+        if (move(pathname_, dest)) {
+                state = true;
+                pathname_ = dest;
+        }
+        return state;
 }
 
 string::size_type File::find_last_separator(const string &pathname)

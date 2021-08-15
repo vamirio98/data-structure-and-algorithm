@@ -2,7 +2,7 @@
  * test_File.cpp - test the File class
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/15 22:56:09
+ * Last Modified: 2021/08/15 23:12:19
  */
 
 #include "File.hpp"
@@ -82,6 +82,9 @@ int main()
         new_file.unbind();
         new_file.bind("./a");
         assert(new_file.mkdir());
+        system("ls -l");
+        assert(new_file.move("./b"));
+        assert(new_file.get_path() == "./b");
         system("ls -l");
         assert(new_file.remove());
         system("ls -l");

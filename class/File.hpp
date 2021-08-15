@@ -2,7 +2,7 @@
  * File.hpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/15 22:58:46
+ * Last Modified: 2021/08/15 23:07:40
  */
 
 #ifndef FILE_HPP
@@ -374,6 +374,27 @@ public:
          * @return Ture when directory was created, false otherwise
          */
         bool mkdir(mode_t mode = 0755);
+
+        /**
+         * @brief Move a file or directory
+         *
+         * @param src The source pathname
+         * @param dest The destination pathname
+         *
+         * @return True when move file or directory successfully,
+         *         false otherwise
+         */
+        static bool move(const std::string &src, const std::string &dest);
+
+        /**
+         * @brief Move a file or directory
+         *
+         * @param dest The destination pathname
+         *
+         * @return True when move file or directory successfully,
+         *         false otherwise
+         */
+        bool move(const std::string &dest);
 
 private:
         /**
