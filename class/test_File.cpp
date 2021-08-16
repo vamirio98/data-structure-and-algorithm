@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 #elif defined(_MSC_VER)
         s1 = ".\\hello\\world";
         ts1 = ".\\hello";
-        s2 = "..\\.git";
+        s3 = "..\\.git";
         File f2("..\\class", s2);
 #endif
 
@@ -58,7 +58,7 @@ int main(int argc, char **argv)
         assert(f1.get_name() == "world");
         f1.unbind();
         assert(f1.get_name() == "");
-        f1.bind("./hello/world");
+        f1.bind(s1);
         assert(f1.get_path() == s1);
 
         cout << "The absolute path of " << f1.get_path() << " is " <<
@@ -104,12 +104,23 @@ int main(int argc, char **argv)
 #if defined(__unix__)
         s4 = "./hello";
 #elif defined(_MSC_VER)
-        s3 = ".\\hello";
+        s4 = ".\\hello";
 #endif
 
         File f4{s4};
         assert(f4.create_new_file());
-        cout << "Expected: information of " << s4 << endl;
+        cout << "Expected: information of file " << s4 << endl;
+        ls(s4);
+        cout << endl;
+
+#if defined(__unix__)
+        s4 = "./world";
+#elif defined(_MSC_VER)
+        s4 = ".\\world";
+#endif
+
+        assert(f4.move(s4));
+        cout << "Expected: information of file " << s4 << endl;
         ls(s4);
         cout << endl;
 
@@ -123,23 +134,23 @@ int main(int argc, char **argv)
 #if defined(__unix__)
         s4 = "./a";
 #elif defined(_MSC_VER)
-        s = ".\\a";
+        s4 = ".\\a";
 #endif
 
         f4.bind(s4);
         assert(f4.mkdir());
-        cout << "Expected: information of " << s4 << endl;
+        cout << "Expected: information of directory " << s4 << endl;
         ls(s4);
         cout << endl;
 
 #if defined(__unix__)
         s4 = "./b";
 #elif defined(_MSC_VER)
-        s = ".\\b";
+        s4 = ".\\b";
 #endif
         assert(f4.move(s4));
         assert(f4.get_path() == s4);
-        cout << "Expected: information of " << s4 << endl;
+        cout << "Expected: information of directory " << s4 << endl;
         ls(s4);
         cout << endl;
 
