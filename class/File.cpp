@@ -2,7 +2,7 @@
  * File.cpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/15 23:13:10
+ * Last Modified: 2021/08/16 00:10:26
  */
 
 #include "File.hpp"
@@ -22,6 +22,7 @@
 
 #include <windows.h>
 #include <io.h>
+#include <direct.h>
 #define stat _stat
 #define access _access
 #define R_OK 4
@@ -314,11 +315,19 @@ bool File::create_new_file(const string &pathname)
         bool state = false;
         if (exists(pathname))
                 return state;
-        auto p = fopen(pathname.c_str(), "w");
+        FILE *p = nullptr;
+#if defined(__unix__)
+        p = fopen(pathname.c_str(), "w");
         if (p) {
                 fclose(p);
                 state = true;
         }
+#elif defined(_MSC_VER)
+        if (fopen_s(&p, pathname.c_str(), "w") == 0) {
+                fclose(p);
+                state = true;
+        }
+#endif
         return state;
 }
 
@@ -332,7 +341,14 @@ bool File::remove(const string &pathname)
         bool state = false;
         if (!exists(pathname))
                 return state;
+#if defined(__unix__)
         state = ::remove(pathname.c_str()) == 0;
+#elif defined(_MSC_VER)
+        if (is_file(pathname))
+                state = DeleteFile(pathname.c_str()) != 0;
+        else if (is_directory(pathname))
+                state = RemoveDirectory(pathname.c_str()) != 0;
+#endif
         return state;
 }
 
@@ -340,6 +356,8 @@ bool File::remove()
 {
         return remove(pathname_);
 }
+
+#if defined(__unix__)
 
 bool File::mkdir(const string &pathname, mode_t mode)
 {
@@ -350,6 +368,20 @@ bool File::mkdir(mode_t mode)
 {
         return mkdir(pathname_, mode);
 }
+
+#elif defined(_MSC_VER)
+
+bool File::mkdir(const string &pathname)
+{
+        return _mkdir(pathname.c_str()) == 0;
+}
+
+bool File::mkdir()
+{
+        return mkdir(pathname_);
+}
+
+#endif
 
 bool File::move(const string &src, const string &dest)
 {

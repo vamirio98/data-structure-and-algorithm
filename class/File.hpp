@@ -2,7 +2,7 @@
  * File.hpp - offer the basic multi-platform file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/15 23:07:40
+ * Last Modified: 2021/08/16 00:04:08
  */
 
 #ifndef FILE_HPP
@@ -339,7 +339,7 @@ public:
         bool create_new_file();
 
         /**
-         * @brief Remove a file or directory
+         * @brief Remove a file or an empty directory
          *
          * @param pathname The name of the file or directory to remove
          *
@@ -349,13 +349,14 @@ public:
         static bool remove(const std::string &pathname);
 
         /**
-         * @brief Remove a file or directory
+         * @brief Remove a file or an empty directory
          *
          * @return Ture if and only if the file or directory is successfully
          *         removed, false otherwise
          */
         bool remove();
 
+#if defined(__unix__)
         /**
          * @brief Crete a directory with the specified permission
          *
@@ -374,6 +375,23 @@ public:
          * @return Ture when directory was created, false otherwise
          */
         bool mkdir(mode_t mode = 0755);
+#elif defined(_MSC_VER)
+        /**
+         * @brief Crete a directory with the specified permission
+         *
+         * @param pathname The name of the directory to create
+         *
+         * @return Ture when directory was created, false otherwise
+         */
+        static bool mkdir(const std::string &pathname);
+
+        /**
+         * @brief Crete a directory
+         *
+         * @return Ture when directory was created, false otherwise
+         */
+        bool mkdir();
+#endif
 
         /**
          * @brief Move a file or directory

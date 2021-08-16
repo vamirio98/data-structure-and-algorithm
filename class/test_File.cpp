@@ -76,18 +76,49 @@ int main()
         assert(file2.get_extension() == "cpp");
         File new_file{"./hello"};
         assert(new_file.create_new_file());
+#if defined(__unix__)
         system("ls -l");
+#elif defined(_MSC_VER)
+        system("dir");
+#endif
         assert(new_file.remove());
+#if defined(__unix__)
         system("ls -l");
+#elif defined(_MSC_VER)
+        system("dir");
+#endif
         new_file.unbind();
-        new_file.bind("./a");
+        string s;
+#if defined(__unix__)
+        s = "./a";
+#elif defined(_MSC_VER)
+        s = ".\\a";
+#endif
+        new_file.bind(s);
         assert(new_file.mkdir());
+#if defined(__unix__)
         system("ls -l");
-        assert(new_file.move("./b"));
-        assert(new_file.get_path() == "./b");
+#elif defined(_MSC_VER)
+        system("dir");
+#endif
+#if defined(__unix__)
+        s = "./b";
+#elif defined(_MSC_VER)
+        s = ".\\b";
+#endif
+        assert(new_file.move(s));
+        assert(new_file.get_path() == s);
+#if defined(__unix__)
         system("ls -l");
+#elif defined(_MSC_VER)
+        system("dir");
+#endif
         assert(new_file.remove());
+#if defined(__unix__)
         system("ls -l");
+#elif defined(_MSC_VER)
+        system("dir");
+#endif
 
         return 0;
 }
