@@ -1,12 +1,12 @@
 /**
- * File.hpp - offer the basic multi-platform file operation
+ * File.hpp - offer the multi-platform basic file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/16 00:04:08
+ * Last Modified: 2021/08/18 23:53:08
  */
 
-#ifndef FILE_HPP
-#define FILE_HPP
+#ifndef FILE_HPP_
+#define FILE_HPP_
 
 #include <vector>
 #include <string>

@@ -1,8 +1,8 @@
 /**
- * File.cpp - offer the basic multi-platform file operation
+ * File.cpp - offer the multi-platform basic file operation
  *
  * Created by Haoyuan Li on 2021/08/11
- * Last Modified: 2021/08/16 00:10:26
+ * Last Modified: 2021/08/18 23:51:51
  */
 
 #include "File.hpp"
