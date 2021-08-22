@@ -2,7 +2,7 @@
  * File_writer.hpp - offer the multi-platform basic file write operation
  *
  * Created by Haoyuan Li on 2021/08/21
- * Last Modified: 2021/08/22 15:53:50
+ * Last Modified: 2021/08/22 23:37:44
  */
 
 #ifndef FILE_WRITER_H_
@@ -16,8 +16,9 @@
 
 class File_writer {
 private:
-        int fd_ = -1;
-        FILE *fp_ = nullptr;
+        int fd_{-1};
+        FILE *fp_{nullptr};
+        std::string pathname_{""};
 
 public:
         File_writer() = default;
@@ -42,11 +43,18 @@ public:
         File_writer(const File &file);
 
         /**
+         * @brief Tell if this stream is ready to be written
+         *
+         * @return True if the file opened successfully, false otherwise
+         */
+        bool ready();
+
+        /**
          * @brief Open a file to write
          *
          * @param pathname The pathname of the file
          *
-         * @return Ture if successed and false if failed
+         * @return True if succeeded and false if failed
          *
          * @sa close()
          */
@@ -57,7 +65,7 @@ public:
          *
          * @param file The file object
          *
-         * @return Ture if successed and false if failed
+         * @return True if succeeded and false if failed
          *
          * @sa close()
          */
@@ -66,7 +74,7 @@ public:
         /**
          * @brief Close the File_writer object
          *
-         * @return Ture if successed and false if failed
+         * @return True if succeeded and false if failed
          *
          * @sa open()
          */
@@ -140,9 +148,16 @@ public:
         /**
          * @brief Flush the stream buffer
          *
-         * @return Ture if successed and false if failed
+         * @return True if succeeded and false if failed
          */
         bool flush();
+
+        /**
+         * @brief Clear the whole contents of the file
+         *
+         * @return True if succeeded and false if failed
+         */
+        bool clear();
 };
 
 #endif
