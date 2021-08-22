@@ -2,7 +2,7 @@
  * File_writer.hpp - offer the multi-platform basic file write operation
  *
  * Created by Haoyuan Li on 2021/08/21
- * Last Modified: 2021/08/22 14:56:08
+ * Last Modified: 2021/08/22 15:44:40
  */
 
 #ifndef FILE_WRITER_H_
@@ -102,6 +102,24 @@ public:
          */
         size_t write(const std::string &s, const size_t &off,
                         size_t len = std::string::npos);
+
+        /**
+         * @brief Append the specified character to the file, after this
+         *        operation, all the new characters written by write() will
+         *        be appended to the end
+         *
+         * @param c The character to append
+         *
+         * @return The the character appended on success and -1 on fail
+         */
+        int append(const char &c);
+
+        /**
+         * @brief Flush the stream buffer
+         *
+         * @return Ture if successed and false if failed
+         */
+        bool flush();
 };
 
 #endif

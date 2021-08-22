@@ -2,7 +2,7 @@
  * test_RW.cpp - test the File_reader and File_writer class
  *
  * Created by Haoyuan Li on 2021/08/21
- * Last Modified: 2021/08/22 14:51:29
+ * Last Modified: 2021/08/22 15:31:07
  */
 
 #include "File.hpp"
@@ -39,12 +39,17 @@ int main()
                 fw.write(c);
         fw.write('\n');
         fw.write(fname);
-        fw.close();
+        fw.append('c');
+        fw.append('\n');
+        fw.write(fname);
+        fw.flush();
 
         fr.reset();
-        for (long unsigned int i = 0; i < txt.size() + fname.length() + 1; ++i)
-                printf("%c", fr.read());
+        int c;
+        while ((c = fr.read()) != -1)
+                printf("%c", c);
         cout << endl;
 
+        fw.close();
         f.remove();
 }
