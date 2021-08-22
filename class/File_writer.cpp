@@ -2,7 +2,7 @@
  * File_writer.cpp - offer the multi-platform basic file write operation
  *
  * Created by Haoyuan Li on 2021/08/21
- * Last Modified: 2021/08/21 11:38:58
+ * Last Modified: 2021/08/22 12:36:13
  */
 
 #include "File_writer.hpp"
@@ -16,7 +16,7 @@ using std::string;
 
 File_writer::File_writer(const string &pathname)
 {
-        fd_ = open(pathname.c_str(), O_CREAT | O_WRONLY);
+        fd_ = ::open(pathname.c_str(), O_CREAT | O_WRONLY);
         fp_ = fopen(pathname.c_str(), "r+");
 }
 
@@ -27,6 +27,32 @@ File_writer::File_writer(const File &file):
 
 File_writer::~File_writer()
 {
+        close();
+}
+
+bool File_writer::open(const string &pathname)
+{
+        bool state = false;
+        fd_ = ::open(pathname.c_str(), O_CREAT | O_WRONLY);
+        fp_ = fopen(pathname.c_str(), "r+");
+        if (fd_ != -1 && fp_ != nullptr)
+                state = true;
+        return state;
+}
+
+bool File_writer::open(const File &file)
+{
+        return open(file.get_absolute_path());
+}
+
+bool File_writer::close()
+{
+        bool state = false;
+        if (fd_ == -1 || fp_ == nullptr)
+                return state;
+        if (flock(fd_, LOCK_UN) == 0 && ::close(fd_) == 0 && fclose(fp_) == 0)
+                state = true;
+        return state;
 }
 
 int File_writer::write(const int &c)

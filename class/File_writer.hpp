@@ -2,7 +2,7 @@
  * File_writer.hpp - offer the multi-platform basic file write operation
  *
  * Created by Haoyuan Li on 2021/08/21
- * Last Modified: 2021/08/21 11:33:28
+ * Last Modified: 2021/08/22 12:35:44
  */
 
 #ifndef FILE_WRITER_H_
@@ -42,7 +42,39 @@ public:
         File_writer(const File &file);
 
         /**
-         * @brief Write a single character
+         * @brief Open a file to write
+         *
+         * @param pathname The pathname of the file
+         *
+         * @return Ture if successed and false if failed
+         *
+         * @sa close()
+         */
+        bool open(const std::string &pathname);
+
+        /**
+         * @brief Open a file to write
+         *
+         * @param file The file object
+         *
+         * @return Ture if successed and false if failed
+         *
+         * @sa close()
+         */
+        bool open(const File &file);
+
+        /**
+         * @brief Close the File_writer object
+         *
+         * @return Ture if successed and false if failed
+         *
+         * @sa open()
+         */
+        bool close();
+
+        /**
+         * @brief Write a single character, when writing to a file, the other
+         *        read and write requests to it will be blocked
          *
          * @param c Int specifying a character to be written
          *
