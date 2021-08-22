@@ -2,7 +2,7 @@
  * File_writer.cpp - offer the multi-platform basic file write operation
  *
  * Created by Haoyuan Li on 2021/08/21
- * Last Modified: 2021/08/22 12:36:13
+ * Last Modified: 2021/08/22 14:59:32
  */
 
 #include "File_writer.hpp"
@@ -65,4 +65,21 @@ int File_writer::write(const int &c)
         }
         flock(fd_, LOCK_UN);
         return ret;
+}
+
+size_t File_writer::write(const string &s)
+{
+        size_t ret = 0;
+        flock(fd_, LOCK_EX);
+        ret = fwrite(s.c_str(), sizeof(char), s.length(), fp_);
+        lseek(fd_, ret, SEEK_CUR);
+        flock(fd_, LOCK_UN);
+        return ret;
+}
+
+size_t File_writer::write(const string &s, const size_t &off, size_t len)
+{
+        if (len == string::npos)
+                len = s.length() - off;
+        return write(s.substr(off, len));
 }

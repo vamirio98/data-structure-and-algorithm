@@ -2,7 +2,7 @@
  * File_writer.hpp - offer the multi-platform basic file write operation
  *
  * Created by Haoyuan Li on 2021/08/21
- * Last Modified: 2021/08/22 12:35:44
+ * Last Modified: 2021/08/22 14:56:08
  */
 
 #ifndef FILE_WRITER_H_
@@ -81,6 +81,27 @@ public:
          * @return The the character written on success and -1 on fail
          */
         int write(const int &c);
+
+        /**
+         * @brief Write a string
+         *
+         * @param s The string
+         *
+         * @return The total number of characters successfully written
+         */
+        size_t write(const std::string &s);
+
+        /**
+         * @brief Write a portion of a string
+         *
+         * @param s The string
+         * @param off Offset from which to start writing characters
+         * @param len Number of characters to write, default remainder
+         *
+         * @return The total number of characters successfully written
+         */
+        size_t write(const std::string &s, const size_t &off,
+                        size_t len = std::string::npos);
 };
 
 #endif
