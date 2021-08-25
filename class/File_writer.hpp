@@ -2,7 +2,7 @@
  * File_writer.hpp - offer the multi-platform basic file write operation
  *
  * Created by Haoyuan Li on 2021/08/21
- * Last Modified: 2021/08/25 23:57:05
+ * Last Modified: 2021/08/26 00:13:46
  */
 
 #ifndef FILE_WRITER_H_
@@ -16,6 +16,7 @@
 #if defined(__unix__)
 
 #include <unistd.h>
+#include <sys/file.h>
 
 #define FILE_BEGIN SEEK_SET
 #define FILE_CURRENT SEEK_CUR

@@ -2,7 +2,7 @@
  * File_reader.hpp - offer the multi-platform basic file read operation
  *
  * Created by Haoyuan Li on 2021/08/17
- * Last Modified: 2021/08/25 23:50:01
+ * Last Modified: 2021/08/26 00:12:55
  */
 
 #ifndef FILE_READER_H_
@@ -15,11 +15,12 @@
 
 #if defined(__unix__)
 
+#include <unistd.h>
+#include <sys/file.h>
+
 #define FILE_BEGIN SEEK_SET
 #define FILE_CURRENT SEEK_CUR
 #define FILE_END SEEK_END
-
-#include <unistd.h>
 
 #elif defined(_MSC_VER)
 

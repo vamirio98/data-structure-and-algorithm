@@ -2,7 +2,7 @@
  * File_reader.cpp - offer the multi-platform basic file read operation
  *
  * Created by Haoyuan Li on 2021/08/18
- * Last Modified: 2021/08/25 23:54:42
+ * Last Modified: 2021/08/26 00:13:17
  */
 
 #include "File_reader.hpp"
@@ -15,7 +15,6 @@
 #if defined(__unix__)
 
 #include <unistd.h>
-#include <sys/file.h>
 
 #elif defined(_MSC_VER)
 

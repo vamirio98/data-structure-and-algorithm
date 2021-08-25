@@ -2,7 +2,7 @@
  * File_writer.cpp - offer the multi-platform basic file write operation
  *
  * Created by Haoyuan Li on 2021/08/21
- * Last Modified: 2021/08/25 23:15:25
+ * Last Modified: 2021/08/26 00:14:00
  */
 
 #include "File_writer.hpp"
@@ -13,7 +13,6 @@
 #if defined(__unix__)
 
 #include <unistd.h>
-#include <sys/file.h>
 
 #elif defined(_MSC_VER)
 
