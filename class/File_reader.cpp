@@ -2,7 +2,7 @@
  * File_reader.cpp - offer the multi-platform basic file read operation
  *
  * Created by Haoyuan Li on 2021/08/18
- * Last Modified: 2021/08/22 23:38:15
+ * Last Modified: 2021/08/25 23:54:42
  */
 
 #include "File_reader.hpp"
@@ -10,8 +10,18 @@
 
 #include <string>
 #include <cstdio>
-#include <sys/file.h>
+#include <cstdlib>
+
+#if defined(__unix__)
+
 #include <unistd.h>
+#include <sys/file.h>
+
+#elif defined(_MSC_VER)
+
+#include <Windows.h>
+
+#endif
 
 using std::string;
 
@@ -22,18 +32,12 @@ File_reader::File_reader(const File &file): File_reader(
 
 File_reader::File_reader(const string &pathname)
 {
-        fd_ = ::open(pathname.c_str(), O_RDONLY);
-        fp_ = fopen(pathname.c_str(), "r");
+        do_open(pathname);
 }
 
 File_reader::~File_reader()
 {
         close();
-}
-
-bool File_reader::ready()
-{
-        return fd_ != -1 && fp_ != nullptr;
 }
 
 bool File_reader::open(const File &file)
@@ -43,46 +47,69 @@ bool File_reader::open(const File &file)
 
 bool File_reader::open(const string &pathname)
 {
-        bool state = false;
-        fd_ = ::open(pathname.c_str(), O_RDONLY);
-        fp_ = fopen(pathname.c_str(), "r");
-        if (fd_ != -1 && fp_ != nullptr)
-                state = true;
-        return state;
+        do_open(pathname);
+        return ready();
 }
 
 bool File_reader::close()
 {
         bool state = false;
-        if (fd_ == -1 || fp_ == nullptr)
+        if (!ready())
                 return state;
-        if (flock(fd_, LOCK_UN) == 0 && ::close(fd_) == 0 && fclose(fp_) == 0)
+        lock();
+#if defined(__unix__)
+        if (unlock() && ::close(fd_) == 0 && fclose(fp_) == 0)
                 state = true;
+#elif defined(_MSC_VER)
+        if (unlock() && CloseHandle(h_file_))
+                state = true;
+#endif
         return state;
+}
+
+long long File_reader::skip(const long long &n)
+{
+        lock();
+        long long offset = file_seek(0, FILE_CURRENT);
+        long long ret = file_seek(n, FILE_CURRENT);
+        ret = (ret == -1) ? 0 : ret - offset;
+        unlock();
+        return ret;
 }
 
 int File_reader::read()
 {
         int c;
-        flock(fd_, LOCK_SH);
+        lock();
+#if defined(__unix__)
         if ((c = fgetc(fp_)) == EOF)
                 c = -1;
-        else
-                lseek(fd_, 1, SEEK_CUR);
-        flock(fd_, LOCK_UN);
+#elif defined(_MSC_VER)
+        DWORD n;
+        if (!ReadFile(h_file_, &c, 1, &n, nullptr))
+                c = -1;
+#endif
+        unlock();
         return c;
 }
 
 size_t File_reader::read(string &s, const size_t &len)
 {
-        flock(fd_, LOCK_SH);
-        char buf[len + 1];
-        auto n = fread(buf, sizeof(char), len, fp_);
-        lseek(fd_, n, SEEK_CUR);
+        lock();
+        char *buf = new char[len + 1];
+        size_t ret = 0;
+#if defined(__unix__)
+        ret = fread(buf, sizeof(char), len, fp_);
+#elif defined(_MSC_VER)
+        DWORD n = 0;
+        ReadFile(h_file_, buf, len, &n, nullptr);
+        ret = n;
+#endif
         buf[len] = '\0';
         s = buf;
-        flock(fd_, LOCK_UN);
-        return n;
+        delete [] buf;
+        unlock();
+        return ret;
 }
 
 size_t File_reader::read(string &s, const size_t &off, const size_t &len)
@@ -101,24 +128,9 @@ size_t File_reader::read(string &s, const size_t &off, const size_t &len)
 bool File_reader::reset_pos()
 {
         bool state = false;
-        flock(fd_, LOCK_SH);
-        if (lseek(fd_, 0, SEEK_SET) == 0 && fseek(fp_, 0, SEEK_SET) == 0)
+        lock();
+        if (file_seek(0, FILE_BEGIN) != -1)
                 state = true;
-        flock(fd_, LOCK_UN);
+        unlock();
         return state;
-}
-
-off_t File_reader::skip(const off_t &n)
-{
-        flock(fd_, LOCK_SH);
-        auto offset = lseek(fd_, 0, SEEK_CUR);
-        auto ret = lseek(fd_, n, SEEK_CUR);
-        if (ret == -1) {
-                ret = 0;
-        } else {
-                fseek(fp_, n, SEEK_CUR);
-                ret -= offset;
-        }
-        flock(fd_, LOCK_UN);
-        return ret;
 }
