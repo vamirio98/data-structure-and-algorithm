@@ -2,7 +2,7 @@
  * File_writer.hpp - offer the multi-platform basic file write operation
  *
  * Created by Haoyuan Li on 2021/08/21
- * Last Modified: 2021/08/26 00:13:46
+ * Last Modified: 2021/08/26 10:07:38
  */
 
 #ifndef FILE_WRITER_H_
@@ -122,7 +122,7 @@ public:
         long long skip(const long long &n);
 
         /**
-         * @brief Write a single character, when writing to a file, the other
+         * @brief Write a single character, while writing to a file, the other
          *        read and write requests to it will be blocked
          *
          * @param c Int specifying a character to be written
@@ -132,7 +132,8 @@ public:
         int write(const int &c);
 
         /**
-         * @brief Write a string
+         * @brief Write a string, while writing to a file, the other read and
+         *        write requests to it will be blocked
          *
          * @param s The string
          *
@@ -141,7 +142,8 @@ public:
         size_t write(const std::string &s);
 
         /**
-         * @brief Write a portion of a string
+         * @brief Write a portion of a string, while writing to a file, the
+         *        other read and write requests to it will be blocked
          *
          * @param s The string
          * @param off Offset from which to start writing characters
@@ -154,8 +156,9 @@ public:
 
         /**
          * @brief Append the specified character to the file, after this
-         *        operation, all the new characters written by write() will
-         *        be appended to the end
+         *        operation, the write file offset will be set to the end of
+         *        the file, while writing to a file, the other read and write
+         *        requests to it will be blocked
          *
          * @param c The character to append
          *
@@ -164,8 +167,9 @@ public:
         int append(const char &c);
 
         /**
-         * @brief Append a string, after this operation, all the new characters
-         * written by write() will be appended to the end
+         * @brief Append a string, after this operation, the write file offset
+         *        will be set to the end of the file, while writing to a file,
+         *        the other read and write requests to it will be blocked
          *
          * @param s The string
          *
@@ -174,8 +178,10 @@ public:
         size_t append(const std::string &s);
 
         /**
-         * @brief Append a portion of string, after this operation, all the
-         *        new characters written by write() will be appended to the end
+         * @brief Append a portion of string, after this operation, the write
+         *        file offset will be set to the end of the file, while
+         *        writing to a file, the other read and write requests to it
+         *        will be blocked
          *
          * @param s The string
          * @param off Offset from which to start writing characters

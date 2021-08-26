@@ -2,7 +2,7 @@
  * File_reader.hpp - offer the multi-platform basic file read operation
  *
  * Created by Haoyuan Li on 2021/08/17
- * Last Modified: 2021/08/26 00:12:55
+ * Last Modified: 2021/08/26 09:52:50
  */
 
 #ifndef FILE_READER_H_
@@ -98,9 +98,9 @@ public:
         bool close();
 
         /**
-         * @brief Read a single char, allow multiple File_reader objects to
-         *        read the same file at the same time while no File_writer
-         *        object is used for writing
+         * @brief Read a single char, while reading from a file, other read
+         *        requests are allowed but other write requests will be
+         *        blocked
          *
          * @return The character read, or -1 if the end of the stream has been
          *         reached
@@ -108,29 +108,27 @@ public:
         int read();
 
         /**
-         * @brief Read characters into a string, allow multiple File_reader
-         *        objects to read the same file at the same time while no
-         *        File_writer object is used for writing
+         * @brief Read characters into a string, while reading from a file,
+         *        other read requests are allowed but other write requests
+         *        will be blocked
          *
          * @param s The string used to store the characters read
          * @param len Maximum number of characters to read
          *
-         * @return The number of characters read, or -1 if the end of the
-         *         stream has been reached
+         * @return The total number of bytes successfully read
          */
         size_t read(std::string &s, const size_t &len);
 
         /**
-         * @brief Read characters into a portion of a string, allow multiple
-         *        File_reader objects to read the same file at the same time
-         *        while no File_writer object is used for writing
+         * @brief Read characters into a portion of a string, while reading
+         *        from a file, other read requests are allowed but other
+         *        write requests will be blocked
          *
          * @param s The string used to store the characters read
          * @param off Offset at which to start storing characters
          * @param len Maximum number of characters to read
          *
-         * @return The number of characters read, or -1 if the end of the
-         *         stream has been reached
+         * @return The total number of bytes successfully read
          */
         size_t read(std::string &s, const size_t &off, const size_t &len);
 
