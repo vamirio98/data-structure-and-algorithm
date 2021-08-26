@@ -2,7 +2,7 @@
  * File_reader.cpp - offer the multi-platform basic file read operation
  *
  * Created by Haoyuan Li on 2021/08/18
- * Last Modified: 2021/08/26 09:27:18
+ * Last Modified: 2021/08/26 12:44:53
  */
 
 #include "File_reader.hpp"
@@ -101,7 +101,7 @@ size_t File_reader::read(string &s, const size_t &len)
         ret = fread(buf, sizeof(char), len, fp_);
 #elif defined(_MSC_VER)
         DWORD n = 0;
-        ReadFile(h_file_, buf, len, &n, nullptr);
+        ReadFile(h_file_, buf, static_cast<DWORD>(len), &n, nullptr);
         ret = n;
 #endif
         buf[ret] = '\0';
